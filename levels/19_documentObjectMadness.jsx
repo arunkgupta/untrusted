@@ -1,6 +1,6 @@
 #BEGIN_PROPERTIES#
 {
-    "version": "1.2.2",
+    "version": "1.3",
     "commandsIntroduced":
         ["global.objective", "map.getDOM", "map.createFromDOM",
          "map.updateDOM", "map.overrideKey", "global.$",
@@ -91,11 +91,18 @@ function startLevel(map) {
 
     function moveToParent(className) {
         var currentPosition = $dom.find('.' + className);
-        if (currentPosition.parent().length > 0 &&
-                !currentPosition.parent().hasClass('container')) {
-            currentPosition.parent().addClass(className);
-            currentPosition.removeClass(className);
-            map.updateDOM($dom);
+        if (currentPosition.parent().length > 0) {
+            if (currentPosition.parent().hasClass('container')) {
+                if (className === 'drEval') {
+                    map.getPlayer().killedBy('moving off the edge of the DOM');
+                } else {
+                    return false;
+                }
+            } else {
+                currentPosition.parent().addClass(className);
+                currentPosition.removeClass(className);
+                map.updateDOM($dom);
+            }
         }
     }
 
